@@ -24,7 +24,7 @@ for (let select of dropdowns) {
 }
 const updateFlag = (element) => {
   let currCode = element.value;
-  console.log(currCode);
+
   let countryCode = countryList[currCode];
   let newSrc = `https://flagsapi.com/${countryCode}/flat/64.png`;
   let img = element.parentElement.querySelector("img");
@@ -48,15 +48,12 @@ btn.addEventListener("click", async (evt) => {
 
   let rate = data[fromCurr.value.toLowerCase()][toCurr.value.toLowerCase()];
 
-  console.log(rate);
   let finalAmount = amtVal * rate;
   msg.innerText = `${amtVal}${fromCurr.value}=${Math.floor(finalAmount)}${
     toCurr.value
   }`;
-  console.log(amtVal);
 
   amtVal = amount.value = " ";
-  console.log(amtVal);
 });
 
 // const BASE_URL = "https://2024-03-06.currency-api.pages.dev/v1/currencies";

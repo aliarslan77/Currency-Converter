@@ -78,3 +78,8 @@ form button {
 form button:hover {
   background-color: black;
 }
+@media (min-width: 370px) and (max-width: 600px) {
+  .container {
+    width: 62vw;
+  }
+}
