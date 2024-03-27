@@ -1,0 +1,132 @@
+const BASE_URL = "https://2024-03-06.currency-api.pages.dev/v1/currencies";
+
+const dropdowns = document.querySelectorAll(".dropdown select");
+const btn = document.querySelector("form button");
+const fromCurr = document.querySelector(".from select");
+const toCurr = document.querySelector(".to select");
+const msg = document.querySelector(".msg");
+
+for (let select of dropdowns) {
+  for (currCode in countryList) {
+    let newOptions = document.createElement("option");
+    newOptions.innerText = currCode;
+    newOptions.value = currCode;
+    if (select.name === "from" && currCode === "USD") {
+      newOptions.selected = "selected";
+    } else if (select.name === "to" && currCode === "PKR") {
+      newOptions.selected = "selected";
+    }
+    select.append(newOptions);
+  }
+  select.addEventListener("change", (evt) => {
+    updateFlag(evt.target);
+  });
+}
+const updateFlag = (element) => {
+  let currCode = element.value;
+  console.log(currCode);
+  let countryCode = countryList[currCode];
+  let newSrc = `https://flagsapi.com/${countryCode}/flat/64.png`;
+  let img = element.parentElement.querySelector("img");
+  img.src = newSrc;
+};
+btn.addEventListener("click", async (evt) => {
+  evt.preventDefault();
+  let amount = document.querySelector(".amount input");
+  let amtVal = amount.value;
+
+  if (amtVal === "" || amtVal < 1) {
+    amtVal = 1;
+    amount.value = "1";
+  }
+
+  const URL = `${BASE_URL}/${fromCurr.value.toLowerCase()}.json`;
+
+  let response = await fetch(URL);
+
+  let data = await response.json();
+
+  let rate = data[fromCurr.value.toLowerCase()][toCurr.value.toLowerCase()];
+
+  console.log(rate);
+  let finalAmount = amtVal * rate;
+  msg.innerText = `${amtVal}${fromCurr.value}=${Math.floor(finalAmount)}${
+    toCurr.value
+  }`;
+  console.log(amtVal);
+
+  amtVal = amount.value = " ";
+  console.log(amtVal);
+});
+
+// const BASE_URL = "https://2024-03-06.currency-api.pages.dev/v1/currencies";
+
+// const dropdowns = document.querySelectorAll(".dropdown select");
+// const btn = document.querySelector("form button");
+// const fromCurr = document.querySelector(".from select");
+// const toCurr = document.querySelector(".to select");
+// const msg = document.querySelector(".msg");
+// const amountInput = document.querySelector(".amount input");
+
+// for (let select of dropdowns) {
+//   for (currCode in countryList) {
+//     let newOptions = document.createElement("option");
+//     newOptions.innerText = currCode;
+//     newOptions.value = currCode;
+//     if (select.name === "from" && currCode === "USD") {
+//       newOptions.selected = "selected";
+//     } else if (select.name === "to" && currCode === "PKR") {
+//       newOptions.selected = "selected";
+//     }
+//     select.append(newOptions);
+//   }
+//   select.addEventListener("change", (evt) => {
+//     updateFlag(evt.target);
+//   });
+// }
+
+// const updateFlag = (element) => {
+//   let currCode = element.value;
+//   let countryCode = countryList[currCode];
+//   let newSrc = `https://flagsapi.com/${countryCode}/flat/64.png`;
+//   let img = element.parentElement.querySelector("img");
+//   img.src = newSrc;
+// };
+
+// window.addEventListener("DOMContentLoaded", () => {
+//   // if (localStorage.getItem("amount")) {
+//   //   amountInput.value = localStorage.getItem("amount");
+//   // }
+//   if (localStorage.getItem("message")) {
+//     msg.innerText = localStorage.getItem("message");
+//   }
+// });
+
+// btn.addEventListener("click", async (evt) => {
+//   evt.preventDefault();
+
+//   let amtVal = amountInput.value;
+
+//   if (amtVal === "" || amtVal < 1) {
+//     amtVal = 1;
+//     amountInput.value = "1";
+//   }
+
+//   const URL = `${BASE_URL}/${fromCurr.value.toLowerCase()}.json`;
+
+//   let response = await fetch(URL);
+
+//   let data = await response.json();
+
+//   let rate = data[fromCurr.value.toLowerCase()][toCurr.value.toLowerCase()];
+
+//   let finalAmount = amtVal * rate;
+//   msg.innerText = `${amtVal}${fromCurr.value} = ${Math.floor(finalAmount)}${
+//     toCurr.value
+//   }`;
+
+//   localStorage.setItem("amount", amtVal);
+//   localStorage.setItem("message", msg.innerText);
+
+//   amountInput.value = "";
+// });
